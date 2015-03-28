@@ -7,6 +7,10 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+/**
+ * Marks your class for instantiation in Singlio
+ * @lazy instantiation by default
+ */ 
 public @interface Singleton {
-	boolean lazy = false;
+	public boolean lazy() default false;
 }

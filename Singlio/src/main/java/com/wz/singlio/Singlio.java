@@ -1,45 +1,56 @@
 package com.wz.singlio;
 
-import java.io.File;
-import java.lang.annotation.Annotation;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Singlio {
 
-	private Map<String, Object> repository = new ConcurrentHashMap<String, Object>();
-	
+	private Map<String, SingletonHolder> repository = new ConcurrentHashMap<String, SingletonHolder>();
+	private String packageName;
+
+	public Singlio() {
+	}
+
+	public Singlio(String packageName) {
+		this.packageName = packageName;
+	}
+
+	/*
+	 * @throws NoDefaultConstructorException if annotated class does not have a
+	 * default constructor
+	 */
 	public Singlio initialize() {
-		try {
-			URL resources = getClass().getClassLoader().getResource("");
-			File root = new File(resources.getFile());
-			
-			List<Class<?>> classes = new ClassCollector().collectClasses(root);
-			for (Class<?> classy : classes) {
-				Annotation[] annotations = classy.getAnnotations();
-				for (Annotation annotation : annotations) {
-					if (annotation instanceof Singleton) {
-						repository.put(classy.getSimpleName(), classy.newInstance());	
-					}
-				}
+		List<Class<?>> classes = new ClassCollector(packageName).collectClasses();
+		for (Class<?> classy : classes) {
+			if (AnnotationHelper.checkAnnotations(classy)) {
+				repository.put(classy.getSimpleName(), new SingletonHolder(classy));
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return this;
 	}
-		
+
+	public <T> T get(Class<?> classy) {
+		return get(classy.getSimpleName());
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <T> T get(String className) {
-		return (T) repository.get(className);
+		if (repository.get(className) == null) {
+			return null;
+		} else {
+			return (T) repository.get(className).getInstance();
+		}
 	}
-	
-	public static void main(String[] args) {
-		Singlio singlio = new Singlio().initialize();
-		ClassCollector singleton = singlio.get("ClassCollector");
-		System.out.println(singleton);
+
+	public int classesLoaded() {
+		int size = 0;
+		for (SingletonHolder holder : repository.values()) {
+			if (holder.isInstanced()) {
+				size++;
+			}
+		}
+		return size;
 	}
-	
+
 }
