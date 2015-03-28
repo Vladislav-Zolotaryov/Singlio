@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
-@Singleton
 public class ClassCollector {
 	
 	private List<Class<?>> classes;
