@@ -31,34 +31,38 @@ public class SingletonHolder {
 		return instance != null;
 	}
 	
+	private Object createPrivateInstance(Constructor<?> constructor) {
+		try {
+			constructor.setAccessible(true);
+			return constructor.newInstance();
+		} finally {
+			constructor.setAccessible(false);
+		}
+	}
+	
 	private Object createInstance() {
+		Object result = null;
 		boolean wasAccessible = false;
 		Constructor<?> constructor = null;
 		try {
 			constructor = classy.getDeclaredConstructor();
-			
 			wasAccessible = constructor.isAccessible();
 			if (constructor.isAccessible()) {
-				return constructor.newInstance();
+				result = constructor.newInstance();
 			} else {
-				constructor.setAccessible(true);
-				return constructor.newInstance();
+				result = createPrivateInstance(constr)
 			}
+		} catch (NoSuchMethodException e) {
+			String message = String.format("Class '%s' should have a default constructor to be Singleton", classy.getSimpleName());
+			throw new NoDefaultConstructorException(message);
 		} catch (InstantiationException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
-		} catch (NoSuchMethodException e) {
-			String message = String.format("Class '%s' should have a default constructor to be Singleton", classy.getSimpleName());
-			throw new NoDefaultConstructorException(message);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e);
 		} catch (InvocationTargetException e) {
 			throw new RuntimeException(e);
-		} finally {
-			if (constructor != null) {
-				constructor.setAccessible(wasAccessible);
-			}
 		}
 	}
 	
