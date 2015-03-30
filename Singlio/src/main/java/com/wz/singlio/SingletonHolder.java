@@ -34,27 +34,15 @@ public class SingletonHolder {
 	private Object createPrivateInstance(Constructor<?> constructor) {
 		try {
 			constructor.setAccessible(true);
-			return constructor.newInstance();
+			return createInstanceSilent(constructor);
 		} finally {
 			constructor.setAccessible(false);
 		}
 	}
 	
-	private Object createInstance() {
-		Object result = null;
-		boolean wasAccessible = false;
-		Constructor<?> constructor = null;
+	private Object createInstanceSilent(Constructor<?> constructor) {
 		try {
-			constructor = classy.getDeclaredConstructor();
-			wasAccessible = constructor.isAccessible();
-			if (constructor.isAccessible()) {
-				result = constructor.newInstance();
-			} else {
-				result = createPrivateInstance(constr)
-			}
-		} catch (NoSuchMethodException e) {
-			String message = String.format("Class '%s' should have a default constructor to be Singleton", classy.getSimpleName());
-			throw new NoDefaultConstructorException(message);
+			return constructor.newInstance();
 		} catch (InstantiationException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
@@ -63,6 +51,20 @@ public class SingletonHolder {
 			throw new RuntimeException(e);
 		} catch (InvocationTargetException e) {
 			throw new RuntimeException(e);
+		} 
+	}
+	
+	private Object createInstance() {
+		try {
+			Constructor<?> constructor = classy.getDeclaredConstructor();
+			if (constructor.isAccessible()) {
+				return createInstanceSilent(constructor);
+			} else {
+				return createPrivateInstance(constructor);
+			}
+		} catch (NoSuchMethodException e) {
+			String message = String.format("Class '%s' should have a default constructor to be Singleton", classy.getSimpleName());
+			throw new NoDefaultConstructorException(message);
 		}
 	}
 	
