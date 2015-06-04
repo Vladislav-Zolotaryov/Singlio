@@ -13,7 +13,7 @@ public class SinglioTest {
 	@Test
 	public void testRootTraversal() {
 		Singlio singleo = new Singlio().initialize();
-		Assert.assertEquals("Should be 3 classes loaded", 2, singleo.classesLoaded()); 
+		Assert.assertEquals("Should be 2 classes loaded", 2, singleo.classesLoaded()); 
 	}
 
 	@Test
