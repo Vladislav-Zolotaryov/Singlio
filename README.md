@@ -1,6 +1,8 @@
 # Singlio
 Singleton container for Java!
 
+[![Build Status](https://api.travis-ci.org/Vladislav-Zolotaryov/Singlio.svg?branch=master)](https://api.travis-ci.org/Vladislav-Zolotaryov/Singlio.svg?branch=master)
+
 Usage:
 
 1. Annotate your class with a @Singleton annotatinon 
