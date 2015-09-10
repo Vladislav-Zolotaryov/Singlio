@@ -1,9 +1,12 @@
 language: java
 jdk:
-- oraclejdk7
-- oraclejdk8
-- openjdk7
+  - oraclejdk7
+  - oraclejdk8
+  - openjdk7
 before_script:
-- cd Singlio
+  - pip install --user codecov
+  - cd Singlio
 script:
-- mvn clean test
+  - mvn clean test
+after_success:
+  - codecov
