@@ -12,9 +12,7 @@ public class ClassCollector {
 	
 	ClassCollector() {}
 	ClassCollector(String packageName) {
-		if (packageName == null) {
-			this.packageName = "";
-		} else {
+		if (packageName != null) {
 			this.packageName = packageName + ".";
 		}
 	}
