@@ -1,7 +1,8 @@
 # Singlio
 Singleton container for Java!
 
-[![Build Status](https://api.travis-ci.org/Vladislav-Zolotaryov/Singlio.svg?branch=master)](https://api.travis-ci.org/Vladislav-Zolotaryov/Singlio.svg?branch=master) [![codecov.io](http://codecov.io/github/Vladislav-Zolotaryov/Singlio/coverage.svg?branch=master)](http://codecov.io/github/Vladislav-Zolotaryov/Singlio?branch=master)
+[![Build Status](https://travis-ci.org/Vladislav-Zolotaryov/Singlio.svg?branch=master)](https://travis-ci.org/Vladislav-Zolotaryov/Singlio)
+[![codecov.io](http://codecov.io/github/Vladislav-Zolotaryov/Singlio/coverage.svg?branch=master)](http://codecov.io/github/Vladislav-Zolotaryov/Singlio?branch=master)
 
 Usage:
 
